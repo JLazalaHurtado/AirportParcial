@@ -1,5 +1,5 @@
 # Airport
 # Integrantes: 
-#Juan Camilo Lazala Hurtado
-#Juan Manuel Piñeres 
-#NRC: 2251
+Juan Camilo Lazala Hurtado
+Juan Manuel Piñeres 
+NRC: 2251
