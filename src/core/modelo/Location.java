@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package airport;
+package core.modelo;
 
 /**
  *
@@ -29,6 +29,7 @@ public class Location {
     public String getAirportId() {
         return airportId;
     }
+    
 
     public String getAirportName() {
         return airportName;
@@ -49,5 +50,9 @@ public class Location {
     public double getAirportLongitude() {
         return airportLongitude;
     }
-    
+
+    @Override
+    public String toString() {
+        return airportId; 
+    }  
 }
