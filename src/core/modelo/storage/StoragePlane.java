@@ -25,15 +25,7 @@ public class StoragePlane {
         return instance;
     }
 
-    public boolean addPlane(Plane plane) {
-        for (Plane p : this.planes) {
-            if (p.getId().equals(plane.getId())) {
-                return false;
-            }
-        }
-        this.planes.add(plane);
-        return true;
-    }
+  
 
     public Plane getPlane(String id) {
         for (Plane plane : this.planes) {
@@ -46,5 +38,14 @@ public class StoragePlane {
 
     public List<Plane> getAllPlanes() {
         return this.planes;
+    }
+    public boolean addPlane(Plane plane) {
+        for (Plane p : this.planes) {
+            if (p.getId().equals(plane.getId())) {
+                return false;
+            }
+        }
+        this.planes.add(plane);
+        return true;
     }
 }

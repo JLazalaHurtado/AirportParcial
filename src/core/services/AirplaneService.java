@@ -12,6 +12,6 @@ import core.modelo.storage.StoragePlane;
 public class AirplaneService {
     public static boolean addAirplane(Plane plane) {
         StoragePlane storage = StoragePlane.getInstance();
-        return storage.addPlane(plane);
+        return storage.addPlane(plane);  
     }
 }

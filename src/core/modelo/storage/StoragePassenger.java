@@ -24,16 +24,17 @@ public class StoragePassenger {
         }
         return instance;
     }
-
-    public boolean addPassenger(Passenger passenger){
+    public boolean addPassenger(Passenger passenger) {
         for (Passenger pass : this.passengers) {
-            if(pass.getId() == passenger.getId()){
+            if (pass.getId() == passenger.getId()) {
                 return false;
             }
         }
         this.passengers.add(passenger);
         return true;
     }
+
+    
 
     public Passenger getPassenger(long id){
         for (Passenger passenger : this.passengers) {

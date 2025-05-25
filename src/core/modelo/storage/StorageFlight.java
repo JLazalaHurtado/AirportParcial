@@ -63,9 +63,10 @@ public class StorageFlight {
         }
         return arrivalLocations;
     }
+
     public List<Location> getAllScaleLocations() {
-        List <Location> scaleLocation = new ArrayList<>();
-        for (Flight flight: this.flights) {
+        List<Location> scaleLocation = new ArrayList<>();
+        for (Flight flight : this.flights) {
             scaleLocation.add(flight.getScaleLocation());
         }
         return scaleLocation;

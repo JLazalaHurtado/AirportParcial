@@ -5,13 +5,15 @@
 package core.vista;
 
 import core.modelo.*;
-import com.formdev.flatlaf.FlatDarkLaf;
-import core.controlador.ControllerAirplane;
 import core.controlador.ControllerFlight;
 import core.controlador.ControllerLocation;
 import core.controlador.ControllerPassenger;
 import core.controlador.utils.Response;
 import core.controlador.validator.FlightValidator;
+import core.services.AgeCalculator;
+import core.services.FullFormats;
+import core.services.FullPhoneGenerator;
+import core.services.calculateArrivalDate;
 import core.vista.helper.AirplaneViewHelper;
 import core.vista.helper.PassengerViewHelper;
 import java.awt.Color;
@@ -19,7 +21,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime; 
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
-import javax.swing.UIManager;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -49,7 +50,7 @@ public class AirportFrame extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);
 
         this.generateMonths();
-        this.generateDays();
+        this.generateDays(); 
         this.generateHours();
         this.generateMinutes();
         this.blockPanels();
@@ -1540,7 +1541,7 @@ public class AirportFrame extends javax.swing.JFrame {
         }
         this.locations.add(new Location(id, name, city, country, latitude, longitude));
 
-        this.comboLocationFlightRegistration.addItem(id);
+        this.comboLocationFlightRegistration.addItem(id); 
         this.comboArrivalLocationFlightRegistration.addItem(id);
         this.comboScaleLocationFlightRegistration.addItem(id);
         txtAirportIdLocationRegistration.setText("");
@@ -1656,21 +1657,24 @@ public class AirportFrame extends javax.swing.JFrame {
                 passenger = p;
             }
         }
-
         ArrayList<Flight> flights = passenger.getFlights();
-        DefaultTableModel model = (DefaultTableModel) tableShowMyFlights.getModel();
-        model.setRowCount(0);
+        DefaultTableModel model = (DefaultTableModel) tableShowMyFlights.getModel();  
+        model.setRowCount(0); 
         for (Flight flight : flights) {
-            model.addRow(new Object[]{flight.getId(), flight.getDepartureDate(), flight.calculateArrivalDate()});
+            model.addRow(new Object[]{flight.getId(), flight.getDepartureDate(), calculateArrivalDate.calculate(flight)}); 
         }
     }//GEN-LAST:event_btnRefreshShowMyFlightsActionPerformed
 
     private void btnRefreshShowAllPassengersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshShowAllPassengersActionPerformed
         // TODO add your handling code here:
-        DefaultTableModel model = (DefaultTableModel) tableShowAllPassengers.getModel();
+        DefaultTableModel model = (DefaultTableModel) tableShowAllPassengers.getModel(); 
+        AgeCalculator ageCalculator = new AgeCalculator();
         model.setRowCount(0);
-        for (Passenger passenger : this.passengers) {
-            model.addRow(new Object[]{passenger.getId(), passenger.getFullname(), passenger.getBirthDate(), passenger.calculateAge(), passenger.generateFullPhone(), passenger.getCountry(), passenger.getNumFlights()});
+        for (Passenger passenger : this.passengers) {    
+            model.addRow(new Object[]{passenger.getId(), FullFormats.getFullname(passenger)
+                    , passenger.getBirthDate(), ageCalculator.calculateAge(passenger),  
+                    FullPhoneGenerator.generateFullPhone(passenger), passenger.getCountry(), 
+                    passenger.getNumFlights()});
         }
     }//GEN-LAST:event_btnRefreshShowAllPassengersActionPerformed
 
@@ -1679,7 +1683,7 @@ public class AirportFrame extends javax.swing.JFrame {
         DefaultTableModel model = (DefaultTableModel) tableShowAllFlights.getModel();
         model.setRowCount(0);
         for (Flight flight : this.flights) {
-            model.addRow(new Object[]{flight.getId(), flight.getDepartureLocation().getAirportId(), flight.getArrivalLocation().getAirportId(), (flight.getScaleLocation() == null ? "-" : flight.getScaleLocation().getAirportId()), flight.getDepartureDate(), flight.calculateArrivalDate(), flight.getPlane().getId(), flight.getNumPassengers()});
+            model.addRow(new Object[]{flight.getId(), flight.getDepartureLocation().getAirportId(), flight.getArrivalLocation().getAirportId(), (flight.getScaleLocation() == null ? "-" : flight.getScaleLocation().getAirportId()), flight.getDepartureDate(), calculateArrivalDate.calculate(flight), flight.getPlane().getId(), flight.getNumPassengers()});
         }
     }//GEN-LAST:event_btnRefreshShowAllFlightsActionPerformed
 

@@ -19,6 +19,7 @@ public class FlightService {
     }
 
     public static void delayFlight(Flight flight, int hours, int minutes) {
-        flight.delay(hours, minutes);
+        DelayFlight delayFlight = new DelayFlight();
+        delayFlight.delay(flight, hours, minutes); 
     }
 }
