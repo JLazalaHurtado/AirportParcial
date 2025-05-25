@@ -18,7 +18,7 @@ import core.vista.helper.AirplaneViewHelper;
 import core.vista.helper.PassengerViewHelper;
 import java.awt.Color;
 import java.time.LocalDate;
-import java.time.LocalDateTime; 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -50,16 +50,16 @@ public class AirportFrame extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);
 
         this.generateMonths();
-        this.generateDays(); 
+        this.generateDays();
         this.generateHours();
         this.generateMinutes();
         this.blockPanels();
         PassengerViewHelper.loadPassengerIdsIntoComboBox(comboUserSelect);
-        AirplaneViewHelper.loadFlightIntoComboBox(comboPlaneFlightRegistration); 
+        AirplaneViewHelper.loadFlightIntoComboBox(comboPlaneFlightRegistration);
         ControllerFlight.loadFlightIDSintoComboBox(comboFlightAddToFlight);
         ControllerFlight.loadDepartureLocationIntoComboBox(comboLocationFlightRegistration);
         ControllerFlight.LoadArrivalLocationIntoComboBox(comboArrivalLocationFlightRegistration);
-        ControllerFlight.loadScaleLocationIntoComboBox(comboScaleLocationFlightRegistration); 
+        ControllerFlight.loadScaleLocationIntoComboBox(comboScaleLocationFlightRegistration);
         ControllerFlight.loadFlightIDSintoComboBox(comboIdDelayFlight);
     }
 
@@ -1531,7 +1531,7 @@ public class AirportFrame extends javax.swing.JFrame {
         String country = txtAirportCountryLocationRegistration.getText();
         double latitude = Double.parseDouble(txtAirportLatitudeLocationRegistration.getText());
         double longitude = Double.parseDouble(txtAirportLongitudeLocationRegistration.getText());
-        Response response = ControllerLocation.createLocation(id, name, city, country, latitude, longitude);  
+        Response response = ControllerLocation.createLocation(id, name, city, country, latitude, longitude);
         if (response.getStatus() >= 500) {
             JOptionPane.showMessageDialog(null, response.getMessage(), "Aeropuerto " + response.getStatus(), JOptionPane.ERROR_MESSAGE);
         } else if (response.getStatus() >= 400) {
@@ -1541,7 +1541,7 @@ public class AirportFrame extends javax.swing.JFrame {
         }
         this.locations.add(new Location(id, name, city, country, latitude, longitude));
 
-        this.comboLocationFlightRegistration.addItem(id); 
+        this.comboLocationFlightRegistration.addItem(id);
         this.comboArrivalLocationFlightRegistration.addItem(id);
         this.comboScaleLocationFlightRegistration.addItem(id);
         txtAirportIdLocationRegistration.setText("");
@@ -1573,7 +1573,6 @@ public class AirportFrame extends javax.swing.JFrame {
         int yearAux = Integer.parseInt(year);
         int monthAux = Integer.parseInt(month);
         LocalDateTime departureDate = LocalDateTime.of(yearAux, monthAux, day, hour, minutes);
-
 
         this.comboFlightAddToFlight.addItem(id);
     }//GEN-LAST:event_btnCreateFlightRegistrationActionPerformed
@@ -1637,7 +1636,7 @@ public class AirportFrame extends javax.swing.JFrame {
         String flightId = comboIdDelayFlight.getItemAt(comboIdDelayFlight.getSelectedIndex());
         String hours = comboHourDelayFlight.getItemAt(comboHourDelayFlight.getSelectedIndex());
         String minutes = comboMinuteDelayFlight.getItemAt(comboMinuteDelayFlight.getSelectedIndex());
-        Response response = FlightValidator.verifyDelay(flightId, minutes, hours); 
+        Response response = FlightValidator.verifyDelay(flightId, minutes, hours);
         if (response.getStatus() >= 500) {
             JOptionPane.showMessageDialog(null, response.getMessage(), "Vuelo ha sido retrasado con exito " + response.getStatus(), JOptionPane.ERROR_MESSAGE);
         } else if (response.getStatus() >= 400) {
@@ -1654,27 +1653,30 @@ public class AirportFrame extends javax.swing.JFrame {
         Passenger passenger = null;
         for (Passenger p : this.passengers) {
             if (p.getId() == passengerId) {
-                passenger = p;
+                passenger = p; 
             }
         }
         ArrayList<Flight> flights = passenger.getFlights();
-        DefaultTableModel model = (DefaultTableModel) tableShowMyFlights.getModel();  
-        model.setRowCount(0); 
+        DefaultTableModel model = (DefaultTableModel) tableShowMyFlights.getModel();
+        model.setRowCount(0);
+        CalculateArrivalDate calculateArrivalDate = new CalculateArrivalDate();
         for (Flight flight : flights) {
-            model.addRow(new Object[]{flight.getId(), flight.getDepartureDate(), calculateArrivalDate.calculate(flight)}); 
+           model.addRow(new Object[]{flight.getId(), flight.getDepartureDate(), calculateArrivalDate.calculate(flight)});;
         }
     }//GEN-LAST:event_btnRefreshShowMyFlightsActionPerformed
 
     private void btnRefreshShowAllPassengersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshShowAllPassengersActionPerformed
         // TODO add your handling code here:
-        DefaultTableModel model = (DefaultTableModel) tableShowAllPassengers.getModel(); 
+        DefaultTableModel model = (DefaultTableModel) tableShowAllPassengers.getModel();
         AgeCalculator ageCalculator = new AgeCalculator();
+
+        FullPhoneGenerator phoneGenerator = new FullPhoneGenerator();
         model.setRowCount(0);
-        for (Passenger passenger : this.passengers) {    
-            model.addRow(new Object[]{passenger.getId(), FullFormats.getFullname(passenger)
-                    , passenger.getBirthDate(), ageCalculator.calculateAge(passenger),  
-                    FullPhoneGenerator.generateFullPhone(passenger), passenger.getCountry(), 
-                    passenger.getNumFlights()});
+        for (Passenger passenger : this.passengers) {
+            model.addRow(new Object[]{passenger.getId(), FullFormats.getFullname(passenger),
+                 passenger.getBirthDate(), ageCalculator.calculateAge(passenger),
+                phoneGenerator.generateFullPhone(passenger), passenger.getCountry(), 
+                passenger.getNumFlights()});
         }
     }//GEN-LAST:event_btnRefreshShowAllPassengersActionPerformed
 
@@ -1682,6 +1684,7 @@ public class AirportFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
         DefaultTableModel model = (DefaultTableModel) tableShowAllFlights.getModel();
         model.setRowCount(0);
+        CalculateArrivalDate calculateArrivalDate = new CalculateArrivalDate(); 
         for (Flight flight : this.flights) {
             model.addRow(new Object[]{flight.getId(), flight.getDepartureLocation().getAirportId(), flight.getArrivalLocation().getAirportId(), (flight.getScaleLocation() == null ? "-" : flight.getScaleLocation().getAirportId()), flight.getDepartureDate(), calculateArrivalDate.calculate(flight), flight.getPlane().getId(), flight.getNumPassengers()});
         }

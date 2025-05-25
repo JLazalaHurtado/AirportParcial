@@ -10,10 +10,12 @@ import core.modelo.Passenger;
  *
  * @author Juan Manuel
  */
-public class FullPhoneGenerator {
-    public static String generateFullPhone(Passenger passenger) {
+public class FullPhoneGenerator implements GeneratorServices { 
+
+    @Override
+    public String generateFullPhone(Passenger passenger) {
         int countryPhoneCode = passenger.getCountryPhoneCode();
         int phone = (int) passenger.getPhone();
-        return "+" + countryPhoneCode + " " + phone;
-    }
+        return "+" + countryPhoneCode + " " + phone; 
+    }  
 }
