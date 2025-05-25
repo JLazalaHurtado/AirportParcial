@@ -44,22 +44,21 @@ public class StoragePassenger {
     }
 
     public List<Passenger> getAllPassengers() {
-        return passengerOrderById();
+        return this.passengers;
     }
 
     public List<Passenger> passengerOrderById() {
-        List<Passenger> temporalList = new ArrayList<>(passengers);
-        for (int i = 0; i < temporalList.size(); i++) {
-            for (int j = 0; j < temporalList.size() - i - 1; j++) {
-              Passenger currentId = temporalList.get(j);
-              Passenger nextId = temporalList.get(j+1);
+        for (int i = 0; i < passengers.size(); i++) {
+            for (int j = 0; j < passengers.size() - i - 1; j++) {
+              Passenger currentId = passengers.get(j);
+              Passenger nextId = passengers.get(j+1);
               if(currentId.getId()>nextId.getId()) {
-                temporalList.set(j, nextId);
-                temporalList.set(j+1, currentId);
+                passengers.set(j, nextId);
+                passengers.set(j+1, currentId);
               }
             }
 
         }
-        return temporalList;
+        return passengers;
     }
 }
