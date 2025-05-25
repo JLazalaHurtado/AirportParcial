@@ -10,7 +10,7 @@ import core.controlador.validator.PassengerValidator;
 import core.modelo.Passenger;
 import core.modelo.storage.StoragePassenger;
 import java.time.LocalDate;
-import javax.swing.JComboBox; 
+
 
 public class ControllerPassenger {
 

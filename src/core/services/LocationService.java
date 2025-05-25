@@ -8,6 +8,13 @@ package core.services;
  *
  * @author Juan Manuel
  */
+import core.modelo.Location;
+import core.modelo.storage.StorageLocation;
+
 public class LocationService {
-    
+    public static boolean addLocation(Location location) {
+        StorageLocation storage = StorageLocation.getInstance();
+        return storage.addLocation(location);
+    }
 }
+ 

@@ -15,7 +15,6 @@ import javax.swing.JComboBox;
 public class PassengerViewHelper {
     public static void loadPassengerIdsIntoComboBox(JComboBox<String> comboBox) {
         StoragePassenger storage = StoragePassenger.getInstance();
-
         for (Passenger p : storage.getAllPassengers()) {
             comboBox.addItem(String.valueOf(p.getId()));
         }

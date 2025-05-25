@@ -11,11 +11,12 @@ import core.controlador.ControllerFlight;
 import core.controlador.ControllerLocation;
 import core.controlador.ControllerPassenger;
 import core.controlador.utils.Response;
+import core.controlador.validator.FlightValidator;
 import core.vista.helper.AirplaneViewHelper;
 import core.vista.helper.PassengerViewHelper;
 import java.awt.Color;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.time.LocalDateTime; 
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
@@ -57,7 +58,7 @@ public class AirportFrame extends javax.swing.JFrame {
         ControllerFlight.loadFlightIDSintoComboBox(comboFlightAddToFlight);
         ControllerFlight.loadDepartureLocationIntoComboBox(comboLocationFlightRegistration);
         ControllerFlight.LoadArrivalLocationIntoComboBox(comboArrivalLocationFlightRegistration);
-        ControllerFlight.loadScaleLocationIntoComboBox(comboScaleLocationFlightRegistration);
+        ControllerFlight.loadScaleLocationIntoComboBox(comboScaleLocationFlightRegistration); 
         ControllerFlight.loadFlightIDSintoComboBox(comboIdDelayFlight);
     }
 
@@ -1529,7 +1530,7 @@ public class AirportFrame extends javax.swing.JFrame {
         String country = txtAirportCountryLocationRegistration.getText();
         double latitude = Double.parseDouble(txtAirportLatitudeLocationRegistration.getText());
         double longitude = Double.parseDouble(txtAirportLongitudeLocationRegistration.getText());
-        Response response = ControllerLocation.createLocation(id, name, city, country, latitude, longitude);
+        Response response = ControllerLocation.createLocation(id, name, city, country, latitude, longitude);  
         if (response.getStatus() >= 500) {
             JOptionPane.showMessageDialog(null, response.getMessage(), "Aeropuerto " + response.getStatus(), JOptionPane.ERROR_MESSAGE);
         } else if (response.getStatus() >= 400) {
@@ -1635,7 +1636,7 @@ public class AirportFrame extends javax.swing.JFrame {
         String flightId = comboIdDelayFlight.getItemAt(comboIdDelayFlight.getSelectedIndex());
         String hours = comboHourDelayFlight.getItemAt(comboHourDelayFlight.getSelectedIndex());
         String minutes = comboMinuteDelayFlight.getItemAt(comboMinuteDelayFlight.getSelectedIndex());
-        Response response = ControllerFlight.verifyDelay(flightId, minutes, hours);
+        Response response = FlightValidator.verifyDelay(flightId, minutes, hours); 
         if (response.getStatus() >= 500) {
             JOptionPane.showMessageDialog(null, response.getMessage(), "Vuelo ha sido retrasado con exito " + response.getStatus(), JOptionPane.ERROR_MESSAGE);
         } else if (response.getStatus() >= 400) {
