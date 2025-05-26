@@ -92,4 +92,12 @@ public class StorageFlight {
         }
         return scaleLocation;
     }
+    public List<Flight> getFlightsByIdPassenger() {
+        List<Flight> temporalList = new ArrayList<>(flights);
+      
+    
+    
+    
+    return temporalList;
+    }
 }

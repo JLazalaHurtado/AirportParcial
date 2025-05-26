@@ -9,6 +9,7 @@ import core.controlador.utils.Status;
 import core.modelo.Passenger;
 import core.modelo.storage.StoragePassenger;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import javax.swing.JComboBox;
 
 public class ControllerPassenger {
@@ -68,11 +69,11 @@ public class ControllerPassenger {
                 return new Response("El código y el número deben ser numéricos", Status.BAD_REQUEST);
             }
 
-            if (phoneCode.length() > 3 && phoneCode.equals("0")) {
+            if (phoneCode.length() > 3 && phoneCodeAux < 0) {
                 return new Response("Código del número celular inválido", Status.BAD_REQUEST);
             }
 
-            if (phone.length() > 10) {
+            if (phone.length() > 11 && phoneAux < 0) {
                 return new Response("Número inválido", Status.BAD_REQUEST);
             }
             if (!validateDate(yearAux, dayAux, monthAux)) {
@@ -96,82 +97,114 @@ public class ControllerPassenger {
         }
     }
 
-    public static Response updatePassengerInfo(String id, String firstName, String lastName, String year, String month, String day, String phoneCode, String phone, String country) {
+    public static Response updatePassenger(String id, String firstnameN, String lastnameN,
+            String yearN, String monthN, String dayN, String countryPhoneCodeN, String phoneN, String countryN) {
         try {
-            if (!verifyString(id)) {
-                return new Response("Id no puede estar vacío", Status.BAD_REQUEST);
+            long idLong;
+            int yearInt;
+            int monthInt;
+            int dayInt;
+            int countryPhoneCodeInt;
+            long phoneLong;
+            
+            idLong = Long.parseLong(id);
+
+            if (firstnameN.equals("")) {
+                return new Response("Firstname must be not empty", Status.BAD_REQUEST);
+            }
+            if (lastnameN.equals("")) {
+                return new Response("Lastname must be not empty", Status.BAD_REQUEST);
+            }
+            
+            try {
+                yearInt = Integer.parseInt(yearN);
+                if (yearN.length() > 4) {
+                    return new Response("Date of year invalid", Status.BAD_REQUEST);
+                }
+                if (yearInt > LocalDateTime.now().getYear()) {
+                    return new Response("Invalid year", Status.BAD_REQUEST);
+                }
+                
+            } catch (NumberFormatException e) {
+                if (yearN.equals("")) {
+                    return new Response("Year must be not empty", Status.BAD_REQUEST);
+                }
+                
+                return new Response("Year must be just numeric", Status.BAD_REQUEST);
+            }
+            try {
+                monthInt = Integer.parseInt(monthN);
+                if (monthInt > 12) {
+                    return new Response("Month invalid", Status.BAD_REQUEST);
+                }
+            } catch (NumberFormatException e) {
+                return new Response("Month must be selected", Status.BAD_REQUEST);
+            }
+            try {
+                dayInt = Integer.parseInt(dayN);
+                if (dayInt > 31) {
+                    return new Response("Month invalid", Status.BAD_REQUEST);
+                }
+            } catch (NumberFormatException e) {
+                return new Response("Day must be selected", Status.BAD_REQUEST);
             }
 
-            if (!verifyIdInArray(id)) {
-                return new Response("Pasajero no encontrado", Status.NOT_FOUND);
+            try {
+                countryPhoneCodeInt = Integer.parseInt(countryPhoneCodeN);
+                if (countryPhoneCodeN.length() > 3) {
+                    return new Response("Country phone code must have 3 or less than 3 digits", Status.BAD_REQUEST);
+                }
+                if (countryPhoneCodeInt < 0) {
+                    return new Response("Country phone code must be greater than 0", Status.BAD_REQUEST);
+                }
+
+            } catch (NumberFormatException e) {
+                if (countryPhoneCodeN.equals("")) {
+                    return new Response("Country phone code must be not empty", Status.BAD_REQUEST);
+                }
+                return new Response("Country phone code must be numeric", Status.BAD_REQUEST);
             }
 
-            if (!verifyString(firstName)) {
-                return new Response("Nombre no puede estar vacío", Status.BAD_REQUEST);
+            try {
+                phoneLong = Long.parseLong(phoneN);
+                if (phoneLong < 0) {
+                    return new Response("Phone must be greater than 0", Status.BAD_REQUEST);
+                }
+                if (phoneN.length() > 11) {
+                    return new Response("Phone must have less than 11 digits", Status.BAD_REQUEST);
+                }
+            } catch (NumberFormatException ex) {
+                if (phoneN.equals("")) {
+                    return new Response("Phone must be not empty", Status.BAD_REQUEST);
+                }
+                return new Response("Phone number must be numeric", Status.BAD_REQUEST);
             }
 
-            if (!verifyString(lastName)) {
-                return new Response("Apellido no puede estar vacío", Status.BAD_REQUEST);
+            if (countryN.equals("")) {
+                return new Response("Country must be not empty", Status.BAD_REQUEST);
             }
 
-            if (!verifyString(year)) {
-                return new Response("Año no puede estar vacío", Status.BAD_REQUEST);
+            LocalDate birthDate = LocalDate.of(yearInt, monthInt, dayInt);
+            StoragePassenger storagePass = StoragePassenger.getInstance();
+            Passenger passenger = storagePass.getPassenger(idLong);
+            
+            if(passenger == null){
+                return new Response("Passenger not found", Status.BAD_REQUEST);
+            }else{
+                passenger.setFirstname(firstnameN);
+                passenger.setLastname(lastnameN);
+                passenger.setBirthDate(birthDate);
+                passenger.setCountryPhoneCode(countryPhoneCodeInt);
+                passenger.setPhone(phoneLong);
+                passenger.setCountry(countryN);
+                return new Response("Passenger info was updated successfully", Status.OK);
             }
 
-            if (!verifyString(month)) {
-                return new Response("Mes no puede estar vacío", Status.BAD_REQUEST);
-            }
-
-            if (!verifyString(day)) {
-                return new Response("Día no puede estar vacío", Status.BAD_REQUEST);
-            }
-
-            if (!verifyString(phoneCode)) {
-                return new Response("Código de teléfono no puede estar vacío", Status.BAD_REQUEST);
-            }
-
-            if (!verifyString(phone)) {
-                return new Response("Número de teléfono no puede estar vacío", Status.BAD_REQUEST);
-            }
-
-            if (!verifyString(country)) {
-                return new Response("País no puede estar vacío", Status.BAD_REQUEST);
-            }
-
-            long idAux = Long.parseLong(id);
-            int yearAux = Integer.parseInt(year);
-            int monthAux = Integer.parseInt(month);
-            int dayAux = Integer.parseInt(day);
-            int phoneCodeAux = Integer.parseInt(phoneCode);
-            long phoneAux = Long.parseLong(phone);
-
-            if (!validateDate(yearAux, dayAux, monthAux)) {
-                return new Response("Día inválido para el mes ingresado", Status.BAD_REQUEST);
-            }
-
-            if (phoneCode.length() > 3 || phoneCode.equals("0")) {
-                return new Response("Código de número telefónico inválido", Status.BAD_REQUEST);
-            }
-
-            if (phone.length() > 10) {
-                return new Response("Número telefónico inválido por la cantidad de dígitos", Status.BAD_REQUEST);
-            }
-
-            LocalDate birthDate = LocalDate.of(yearAux, monthAux, dayAux);
-            Passenger updatedPassenger = new Passenger(idAux, firstName, lastName, birthDate, phoneCodeAux, phoneAux, country);
-
-            StoragePassenger storagePassenger = StoragePassenger.getInstance();
-            Passenger existingPassenger = storagePassenger.getPassenger(idAux);
-
-            if (existingPassenger == null) {
-                return new Response("No se pudo encontrar pasajero con ese ID", Status.NOT_FOUND);
-            }
-
-            return new Response("Pasajero actualizado exitosamente", Status.CREATED);
-        } catch (Exception e) {
-            return new Response("Error inesperado, contacte al administrador", Status.INTERNAL_SERVER_ERROR);
+        } catch (Exception ex) {
+            return new Response("Unexpected error", Status.INTERNAL_SERVER_ERROR);
         }
-    }
+
+    }  
 
     public static boolean verificationLeapYear(int year) {
         return (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0);

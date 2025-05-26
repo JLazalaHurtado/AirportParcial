@@ -11,7 +11,7 @@ import java.util.List;
 public class StoragePassenger {
 
     private static StoragePassenger instance;
-    ArrayList<Passenger> passengers;
+     ArrayList<Passenger> passengers;
 
     private StoragePassenger() {
         this.passengers = new ArrayList<>();
@@ -50,12 +50,12 @@ public class StoragePassenger {
     public List<Passenger> passengerOrderById() {
         for (int i = 0; i < passengers.size(); i++) {
             for (int j = 0; j < passengers.size() - i - 1; j++) {
-              Passenger currentId = passengers.get(j);
-              Passenger nextId = passengers.get(j+1);
-              if(currentId.getId()>nextId.getId()) {
-                passengers.set(j, nextId);
-                passengers.set(j+1, currentId);
-              }
+                Passenger currentId = passengers.get(j);
+                Passenger nextId = passengers.get(j + 1);
+                if (currentId.getId() > nextId.getId()) {
+                    passengers.set(j, nextId);
+                    passengers.set(j + 1, currentId);
+                }
             }
 
         }
