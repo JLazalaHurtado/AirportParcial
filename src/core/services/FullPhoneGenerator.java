@@ -10,7 +10,7 @@ import core.modelo.Passenger;
  *
  * @author Juan Manuel
  */
-public class FullPhoneGenerator implements GeneratorServices { 
+public class FullPhoneGenerator implements GeneratorService { 
 
     @Override
     public String generateFullPhone(Passenger passenger) {

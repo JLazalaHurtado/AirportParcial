@@ -11,8 +11,10 @@ import java.util.ArrayList;
  *
  * @author edangulo
  */
+
+
 public class Flight {
-    
+
     private final String id;
     private ArrayList<Passenger> passengers;
     private Plane plane;
@@ -24,9 +26,9 @@ public class Flight {
     private int minutesDurationArrival;
     private int hoursDurationScale;
     private int minutesDurationScale;
-    
 
-    public Flight(String id, Plane plane, Location departureLocation, Location arrivalLocation, LocalDateTime departureDate, int hoursDurationArrival, int minutesDurationArrival) {
+    public Flight(String id, Plane plane, Location departureLocation, Location arrivalLocation,
+            LocalDateTime departureDate, int hoursDurationArrival, int minutesDurationArrival) {
         this.id = id;
         this.passengers = new ArrayList<>();
         this.plane = plane;
@@ -35,11 +37,14 @@ public class Flight {
         this.departureDate = departureDate;
         this.hoursDurationArrival = hoursDurationArrival;
         this.minutesDurationArrival = minutesDurationArrival;
-        
+
         this.plane.addFlight(this);
     }
 
-    public Flight(String id, Plane plane, Location departureLocation, Location scaleLocation, Location arrivalLocation, LocalDateTime departureDate, int hoursDurationArrival, int minutesDurationArrival, int hoursDurationScale, int minutesDurationScale) {
+    public Flight(String id, Plane plane, Location departureLocation, Location scaleLocation,
+            Location arrivalLocation, LocalDateTime departureDate,
+            int hoursDurationArrival, int minutesDurationArrival,
+            int hoursDurationScale, int minutesDurationScale) {
         this.id = id;
         this.passengers = new ArrayList<>();
         this.plane = plane;
@@ -51,14 +56,14 @@ public class Flight {
         this.minutesDurationArrival = minutesDurationArrival;
         this.hoursDurationScale = hoursDurationScale;
         this.minutesDurationScale = minutesDurationScale;
-        
+
         this.plane.addFlight(this);
     }
-    
+
     public void addPassenger(Passenger passenger) {
         this.passengers.add(passenger);
     }
-    
+
     public String getId() {
         return id;
     }
@@ -102,11 +107,11 @@ public class Flight {
     public void setDepartureDate(LocalDateTime departureDate) {
         this.departureDate = departureDate;
     }
-    
+
     public int getNumPassengers() {
         return passengers.size();
     }
-    
+
     public ArrayList<Passenger> getPassengers() {
         return passengers;
     }

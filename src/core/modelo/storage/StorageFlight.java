@@ -44,8 +44,29 @@ public class StorageFlight {
         return null;
     }
 
+    public ArrayList<Flight> getFlights() {
+        return flights;
+    }
+    
+
     public List<Flight> getAllFlight() {
         return this.flights;
+    }
+
+    public List<Flight> orderAirplaneById() {
+        for (int i = 0; i < flights.size(); i++) {
+            for (int j = 0; j < flights.size() - i - 1; j++) {
+                Flight currentId = flights.get(j);
+                Flight nextId = flights.get(j + 1);
+                if (currentId.getId().compareTo(nextId.getId()) > 0) {
+                    flights.set(j, nextId);
+                    flights.set(j + 1, currentId);
+                }
+            }
+
+        }
+
+        return flights;
     }
 
     public List<Location> getAllDepartureLocations() {
@@ -70,5 +91,13 @@ public class StorageFlight {
             scaleLocation.add(flight.getScaleLocation());
         }
         return scaleLocation;
+    }
+    public List<Flight> getFlightsByIdPassenger() {
+        List<Flight> temporalList = new ArrayList<>(flights);
+      
+    
+    
+    
+    return temporalList;
     }
 }

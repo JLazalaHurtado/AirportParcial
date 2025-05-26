@@ -12,7 +12,7 @@ import java.util.ArrayList;
  * @author edangulo
  */
 public class Plane {
-    
+
     private final String id;
     private String brand;
     private String model;
@@ -32,7 +32,7 @@ public class Plane {
     public void addFlight(Flight flight) {
         this.flights.add(flight);
     }
-    
+
     public String getId() {
         return id;
     }
@@ -56,9 +56,9 @@ public class Plane {
     public ArrayList<Flight> getFlights() {
         return flights;
     }
-    
+
     public int getNumFlights() {
         return flights.size();
     }
-    
+
 }

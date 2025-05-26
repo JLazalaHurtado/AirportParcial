@@ -10,7 +10,7 @@ import core.modelo.Passenger;
  *
  * @author Juan Manuel
  */
-public class FullFormats implements FormatGenerator{
+public class FullFormat implements FormatGenerator{
     @Override
     public String getFullname(Passenger passenger) {
         String firstname = passenger.getFirstname();

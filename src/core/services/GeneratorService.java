@@ -10,6 +10,6 @@ import core.modelo.Passenger;
  *
  * @author Juan Manuel
  */
-public interface GeneratorServices {
+public interface GeneratorService {
     String generateFullPhone(Passenger passenger);
 }

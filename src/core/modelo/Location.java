@@ -9,13 +9,13 @@ package core.modelo;
  * @author edangulo
  */
 public class Location {
-    
+
     private final String airportId;
     private String airportName;
     private String airportCity;
     private String airportCountry;
     private double airportLatitude;
-    private double airportLongitude;
+    private double airportLongitude; 
 
     public Location(String airportId, String airportName, String airportCity, String airportCountry, double airportLatitude, double airportLongitude) {
         this.airportId = airportId;
@@ -29,7 +29,7 @@ public class Location {
     public String getAirportId() {
         return airportId;
     }
-    
+
 
     public String getAirportName() {
         return airportName;
@@ -54,5 +54,5 @@ public class Location {
     @Override
     public String toString() {
         return airportId; 
-    }  
+    }
 }

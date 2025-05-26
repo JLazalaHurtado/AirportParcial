@@ -9,10 +9,11 @@ import core.modelo.*;
 import core.controlador.ControllerFlight;
 import core.controlador.ControllerLocation;
 import core.controlador.ControllerPassenger;
+import core.controlador.ControllerTable;
 import core.controlador.utils.Response;
 import core.services.AgeCalculator;
 import core.services.CalculateArrivalDate;
-import core.services.FullFormats;
+import core.services.FullFormat;
 import core.services.FullPhoneGenerator;
 import java.awt.Color;
 import java.time.LocalDate;
@@ -158,7 +159,7 @@ public class AirportFrame extends javax.swing.JFrame {
         btnCreateLocationRegistration = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         jLabel22 = new javax.swing.JLabel();
-        txtIdFlightRegistration = new javax.swing.JTextField();
+        jTextField19 = new javax.swing.JTextField();
         jLabel23 = new javax.swing.JLabel();
         comboPlaneFlightRegistration = new javax.swing.JComboBox<>();
         comboLocationFlightRegistration = new javax.swing.JComboBox<>();
@@ -519,7 +520,7 @@ public class AirportFrame extends javax.swing.JFrame {
         jLabel22.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
         jLabel22.setText("ID:");
 
-        txtIdFlightRegistration.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
+        jTextField19.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
 
         jLabel23.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
         jLabel23.setText("Plane:");
@@ -651,7 +652,7 @@ public class AirportFrame extends javax.swing.JFrame {
                             .addComponent(jLabel23))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(txtIdFlightRegistration)
+                            .addComponent(jTextField19)
                             .addComponent(comboPlaneFlightRegistration, 0, 130, Short.MAX_VALUE))))
                 .addGap(45, 45, 45)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -719,7 +720,7 @@ public class AirportFrame extends javax.swing.JFrame {
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addGap(3, 3, 3)
                         .addComponent(jLabel22))
-                    .addComponent(txtIdFlightRegistration, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jTextField19, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(27, 27, 27)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel23)
@@ -1552,27 +1553,36 @@ public class AirportFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCreateLocationRegistrationActionPerformed
 
     private void btnCreateFlightRegistrationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreateFlightRegistrationActionPerformed
-        // TODO add your handling code here:
-        String id = txtIdFlightRegistration.getText();
-        String planeId = comboPlaneFlightRegistration.getItemAt(comboPlaneFlightRegistration.getSelectedIndex());
-        String departureLocationId = comboLocationFlightRegistration.getItemAt(comboLocationFlightRegistration.getSelectedIndex());
-        String arrivalLocationId = comboArrivalLocationFlightRegistration.getItemAt(comboArrivalLocationFlightRegistration.getSelectedIndex());
-        String scaleLocationId = comboScaleLocationFlightRegistration.getItemAt(comboScaleLocationFlightRegistration.getSelectedIndex());
-        String year = txtDepartureDateFlightRegistration.getText();
-        String month = comboMonthFlightRegistration.getItemAt(comboMonthFlightRegistration.getSelectedIndex());
-        int day = Integer.parseInt(comboDayFlightRegistration.getItemAt(comboDayFlightRegistration.getSelectedIndex()));
-        int hour = Integer.parseInt(comboHourFlightRegistration.getItemAt(comboHourFlightRegistration.getSelectedIndex()));
-        int minutes = Integer.parseInt(comboMinuteFlightRegistration.getItemAt(comboMinuteFlightRegistration.getSelectedIndex()));
-        int hoursDurationsArrival = Integer.parseInt(comboDuration1Hour.getItemAt(comboDuration1Hour.getSelectedIndex()));
-        int minutesDurationsArrival = Integer.parseInt(comboDuration1Minute.getItemAt(comboDuration1Minute.getSelectedIndex()));
-        int hoursDurationsScale = Integer.parseInt(comboDuration2Hour.getItemAt(comboDuration2Hour.getSelectedIndex()));
-        int minutesDurationsScale = Integer.parseInt(comboDuration2Minute.getItemAt(comboDuration2Minute.getSelectedIndex()));
+        String id = txtIdPassenger.getText(); 
+        String firstname = txtFirstNamePassenger.getText();
+        String lastname = txtLastNamePassenger.getText();
+        String year = txtBirthdateYearPassenger.getText();
+        String month = comboMonthPassenger.getItemAt(comboMonthPassenger.getSelectedIndex());
+        String day = comboDayPassenger.getItemAt(comboDayPassenger.getSelectedIndex());
+        String phoneCode = txtPhoneCodePassenger.getText();
+        String phone = txtPhoneNumPassenger.getText();
+        String country = txtCountryPassenger.getText();
 
-        int yearAux = Integer.parseInt(year);
-        int monthAux = Integer.parseInt(month);
-        LocalDateTime departureDate = LocalDateTime.of(yearAux, monthAux, day, hour, minutes);
+        Response response = ControllerPassenger.registerPassenger(id, firstname, lastname, year, day, month, phoneCode, phone, country);
+        if (response.getStatus() >= 500) {
+            JOptionPane.showMessageDialog(null, response.getMessage(), "Error " + response.getStatus(), JOptionPane.ERROR_MESSAGE);
+        } else if (response.getStatus() >= 400) {
+            JOptionPane.showMessageDialog(null, response.getMessage(), "Error " + response.getStatus(), JOptionPane.WARNING_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(null, response.getMessage(), "Error mensaje ", JOptionPane.INFORMATION_MESSAGE);
+        }
+        this.comboUserSelect.addItem(" " + id);
+        txtIdPassenger.setText("");
+        txtFirstNamePassenger.setText("");
+        txtLastNamePassenger.setText("");
+        txtBirthdateYearPassenger.setText("");
+        txtPhoneCodePassenger.setText("");
+        txtPhoneNumPassenger.setText("");
+        txtCountryPassenger.setText("");
+        comboMonthPassenger.setSelectedIndex(0);
+        comboDayPassenger.setSelectedIndex(0);
 
-        this.comboFlightAddToFlight.addItem(id);
+ 
     }//GEN-LAST:event_btnCreateFlightRegistrationActionPerformed
 
     private void btnUpdateInfoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateInfoActionPerformed
@@ -1646,20 +1656,14 @@ public class AirportFrame extends javax.swing.JFrame {
 
     private void btnRefreshShowMyFlightsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshShowMyFlightsActionPerformed
         // TODO add your handling code here:
-        long passengerId = Long.parseLong(comboUserSelect.getItemAt(comboUserSelect.getSelectedIndex()));
-
-        Passenger passenger = null;
-        for (Passenger p : this.passengers) {
-            if (p.getId() == passengerId) {
-                passenger = p; 
-            } 
-        }
-        ArrayList<Flight> flights = passenger.getFlights();
-        DefaultTableModel model = (DefaultTableModel) tableShowMyFlights.getModel(); 
-        model.setRowCount(0);
-        CalculateArrivalDate calculateArrivalDate = new CalculateArrivalDate();  
-        for (Flight flight : flights) {
-           model.addRow(new Object[]{flight.getId(), flight.getDepartureDate(), calculateArrivalDate.calculate(flight)});;
+       String passengerId = comboUserSelect.getItemAt(comboUserSelect.getSelectedIndex());
+        Response response = ControllerTable.showMyFlights(tableShowMyFlights, passengerId);   
+        if (response.getStatus() >= 500) {
+            JOptionPane.showMessageDialog(null, response.getMessage(), "Solicitud aceptada" + response.getStatus(), JOptionPane.ERROR_MESSAGE);
+        } else if (response.getStatus() >= 400) {
+            JOptionPane.showMessageDialog(null, response.getMessage(), "Error al momento de enviar la solicitud " + response.getStatus(), JOptionPane.WARNING_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(null, response.getMessage(), "Error mensaje ", JOptionPane.INFORMATION_MESSAGE);
         }
     }//GEN-LAST:event_btnRefreshShowMyFlightsActionPerformed
 
@@ -1669,7 +1673,7 @@ public class AirportFrame extends javax.swing.JFrame {
         AgeCalculator ageCalculator = new AgeCalculator();
 
         FullPhoneGenerator phoneGenerator = new FullPhoneGenerator(); 
-        FullFormats fullFormats = new FullFormats();
+        FullFormat fullFormats = new FullFormat();
         model.setRowCount(0);
         for (Passenger passenger : this.passengers) {
             model.addRow(new Object[]{passenger.getId(), fullFormats.getFullname(passenger),
@@ -1855,6 +1859,7 @@ public class AirportFrame extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JTextField jTextField19;
     private core.modelo.PanelRound panelRound1;
     private core.modelo.PanelRound panelRound2;
     private core.modelo.PanelRound panelRound3;
@@ -1878,7 +1883,6 @@ public class AirportFrame extends javax.swing.JFrame {
     private javax.swing.JTextField txtFirstNameUpdateInfo;
     private javax.swing.JTextField txtIdAddToFlight;
     private javax.swing.JTextField txtIdAirplaneRegistration;
-    private javax.swing.JTextField txtIdFlightRegistration;
     private javax.swing.JTextField txtIdPassengerRegistration;
     private javax.swing.JTextField txtLastNamePassengerRegistration;
     private javax.swing.JTextField txtLastNameUpdateInfo;

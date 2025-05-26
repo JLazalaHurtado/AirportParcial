@@ -6,6 +6,7 @@ package core.modelo.storage;
 
 import core.modelo.Location;
 import java.util.ArrayList;
+import java.util.List;
 
 public class StorageLocation {
 
@@ -22,6 +23,7 @@ public class StorageLocation {
         }
         return instance;
     }
+
     public boolean addLocation(Location location) {
         for (Location l : this.locations) {
             if (l.getAirportId().equals(location.getAirportId())) {
@@ -30,18 +32,37 @@ public class StorageLocation {
         }
         this.locations.add(location);
         return true;
-
     }
 
-
-
     public Location getLocation(String id) {
-     
-            for (Location location : this.locations) {
-                if (location.getAirportId().equals(id)) {
-                    return location;
+
+        for (Location location : this.locations) {
+            if (location.getAirportId().equals(id)) {
+                return location;
+            }
+        }
+        return null;
+    }
+
+    public List<Location> getAllLocation() {
+        return this.locations;
+    }
+
+    public List<Location> orderLocationById() {
+        
+
+        for (int i = 0; i < locations.size(); i++) {
+            for (int j = 0; j < locations.size() - i - 1; j++) {
+                Location currentId = locations.get(j);
+                Location nextId = locations.get(j + 1);
+                if (currentId.getAirportId().compareTo(nextId.getAirportId()) > 0) {
+                    locations.set(j, nextId);
+                    locations.set(j + 1, currentId);
                 }
             }
-            return null;
+
+        }
+
+        return locations;
     }
 }
