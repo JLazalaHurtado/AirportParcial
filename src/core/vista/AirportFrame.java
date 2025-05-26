@@ -1668,10 +1668,11 @@ public class AirportFrame extends javax.swing.JFrame {
         DefaultTableModel model = (DefaultTableModel) tableShowAllPassengers.getModel();
         AgeCalculator ageCalculator = new AgeCalculator();
 
-        FullPhoneGenerator phoneGenerator = new FullPhoneGenerator();
+        FullPhoneGenerator phoneGenerator = new FullPhoneGenerator(); 
+        FullFormats fullFormats = new FullFormats();
         model.setRowCount(0);
         for (Passenger passenger : this.passengers) {
-            model.addRow(new Object[]{passenger.getId(), FullFormats.getFullname(passenger),
+            model.addRow(new Object[]{passenger.getId(), fullFormats.getFullname(passenger),
                  passenger.getBirthDate(), ageCalculator.calculateAge(passenger),
                 phoneGenerator.generateFullPhone(passenger), passenger.getCountry(), 
                 passenger.getNumFlights()});

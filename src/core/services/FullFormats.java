@@ -10,10 +10,12 @@ import core.modelo.Passenger;
  *
  * @author Juan Manuel
  */
-public class FullFormats {
-    public static String getFullname(Passenger passenger) {
+public class FullFormats implements FormatGenerator{
+    @Override
+    public String getFullname(Passenger passenger) {
         String firstname = passenger.getFirstname();
         String lastname = passenger.getLastname();
-        return firstname + " " + lastname;
+        return firstname + " " + lastname;  
     }
+    
 }
