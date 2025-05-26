@@ -4,18 +4,16 @@
  */
 package core.vista;
 
+import core.controlador.ControllerAirplane;
 import core.modelo.*;
 import core.controlador.ControllerFlight;
 import core.controlador.ControllerLocation;
 import core.controlador.ControllerPassenger;
 import core.controlador.utils.Response;
-import core.controlador.validator.FlightValidator;
 import core.services.AgeCalculator;
+import core.services.CalculateArrivalDate;
 import core.services.FullFormats;
 import core.services.FullPhoneGenerator;
-import core.services.calculateArrivalDate;
-import core.vista.helper.AirplaneViewHelper;
-import core.vista.helper.PassengerViewHelper;
 import java.awt.Color;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -54,8 +52,8 @@ public class AirportFrame extends javax.swing.JFrame {
         this.generateHours();
         this.generateMinutes();
         this.blockPanels();
-        PassengerViewHelper.loadPassengerIdsIntoComboBox(comboUserSelect);
-        AirplaneViewHelper.loadFlightIntoComboBox(comboPlaneFlightRegistration);
+        ControllerPassenger.loadPassengerIdsIntoComboBox(comboUserSelect);
+        ControllerAirplane.loadFlightIntoComboBox(comboPlaneFlightRegistration);  
         ControllerFlight.loadFlightIDSintoComboBox(comboFlightAddToFlight);
         ControllerFlight.loadDepartureLocationIntoComboBox(comboLocationFlightRegistration);
         ControllerFlight.LoadArrivalLocationIntoComboBox(comboArrivalLocationFlightRegistration);
@@ -1636,7 +1634,7 @@ public class AirportFrame extends javax.swing.JFrame {
         String flightId = comboIdDelayFlight.getItemAt(comboIdDelayFlight.getSelectedIndex());
         String hours = comboHourDelayFlight.getItemAt(comboHourDelayFlight.getSelectedIndex());
         String minutes = comboMinuteDelayFlight.getItemAt(comboMinuteDelayFlight.getSelectedIndex());
-        Response response = FlightValidator.verifyDelay(flightId, minutes, hours);
+        Response response = ControllerFlight.verifyDelay(flightId, minutes, hours);
         if (response.getStatus() >= 500) {
             JOptionPane.showMessageDialog(null, response.getMessage(), "Vuelo ha sido retrasado con exito " + response.getStatus(), JOptionPane.ERROR_MESSAGE);
         } else if (response.getStatus() >= 400) {
@@ -1654,12 +1652,12 @@ public class AirportFrame extends javax.swing.JFrame {
         for (Passenger p : this.passengers) {
             if (p.getId() == passengerId) {
                 passenger = p; 
-            }
+            } 
         }
         ArrayList<Flight> flights = passenger.getFlights();
-        DefaultTableModel model = (DefaultTableModel) tableShowMyFlights.getModel();
+        DefaultTableModel model = (DefaultTableModel) tableShowMyFlights.getModel(); 
         model.setRowCount(0);
-        CalculateArrivalDate calculateArrivalDate = new CalculateArrivalDate();
+        CalculateArrivalDate calculateArrivalDate = new CalculateArrivalDate();  
         for (Flight flight : flights) {
            model.addRow(new Object[]{flight.getId(), flight.getDepartureDate(), calculateArrivalDate.calculate(flight)});;
         }

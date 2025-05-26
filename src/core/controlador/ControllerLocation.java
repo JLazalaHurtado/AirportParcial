@@ -6,15 +6,15 @@ package core.controlador;
 
 import core.controlador.utils.Response;
 import core.controlador.utils.Status;
-
-import static core.controlador.validator.LocationValidator.verifyDecimalOfLongitudAndLatitude;
-import static core.controlador.validator.LocationValidator.verifyIdFormat;
-import static core.controlador.validator.LocationValidator.verifyStrings;
 import core.modelo.Location;
 import core.modelo.storage.StorageLocation;
+import java.util.ArrayList; 
 
+/**
+ *
+ * @author jlaza
+ */
 public class ControllerLocation {
-
 
     public static Response createLocation(String id, String name, String city, String country, double latitude, double longitude) {
         try {
@@ -49,11 +49,10 @@ public class ControllerLocation {
             }
             StorageLocation storageLocation = StorageLocation.getInstance();
             if (!storageLocation.addLocation(new Location(id, name, city, country, latitude, longitude))) {
-                return new Response("Ya hay un Aeropuerto con ese ID", Status.BAD_REQUEST);
+            return new Response("Ya hay un Aeropuerto con ese ID", Status.BAD_REQUEST);
+        }
 
-            }
-
-            return new Response("Aeropuerto Registrado", Status.CREATED);
+        return new Response("Aeropuerto Registrado", Status.CREATED);
 
         } catch (NumberFormatException e) {
             return new Response("La longitud y latitud deben ser numéricos", Status.BAD_REQUEST);
@@ -61,5 +60,56 @@ public class ControllerLocation {
             return new Response("Error inesperado, contacte al administrador", Status.INTERNAL_SERVER_ERROR);
         }
 
+    }
+
+    public static boolean verifyIdFormat(String idAux) {
+        if (idAux.length() != 3) { // Verify the lenght of Id
+            return false;
+        }
+
+        int upperCaseCount = 0;
+        for (int i = 0; i < idAux.length(); i++) {
+            if (Character.isUpperCase(idAux.charAt(i))) {
+                upperCaseCount++;
+            }
+        }                                                  // Cont how many capital Letter the word have
+        if (upperCaseCount != 3) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public static boolean verifyDecimalOfLongitudAndLatitude(String auxVariable) {
+        boolean puntoEncontrado = false;
+        int contAux = 0;
+
+        for (int i = 0; i < auxVariable.length(); i++) {
+            char caracterAux = auxVariable.charAt(i);
+            if (caracterAux == '.' || caracterAux == ',') {
+                puntoEncontrado = true;
+                continue;
+            }
+            if (puntoEncontrado && Character.isDigit(caracterAux)) {
+                contAux++;
+                if (contAux > 4) {
+                    return false;
+                }
+            } else if (puntoEncontrado && !Character.isDigit(caracterAux)) {
+                break;
+            }
+        }
+
+        return true;
+    }
+
+    public static Boolean verifyStrings(String variable) {
+        for (int i = 0; i < variable.length(); i++) {
+            char aux = variable.charAt(i);
+            if (!Character.isLetter(aux) && !Character.isWhitespace(aux)) {
+                return false;
+            }
+        }
+        return true;
     }
 }
